@@ -19,29 +19,31 @@ the following data processing steps:
     - Allow classification of user input
 
 ## File Description
-    .
-    +-- app     
-    |   +-- run.py                   # flask web app
-    |   +-- templates   
-    |       +-- go.html              # Classification result
-    |       +-- master.html          # Homepage    
-    +-- data                   
-    |   +-- disaster_categories.csv # Data set classification categories  
-    |   +-- disaster_messages.csv   # Data set messages
-    |    +-- process_data.py         # Extract Transform Load Data
-    +-- models
-    |   +-- train_classifier.py     # Train and save model classifier 
-    +-- static  
-    |   +-- Example.png             # Picture of example
-    |   +-- Homepage.png            # Picture of Homepage
-    +-- README.md                   # Readme
-    +-- notebooks                   # Jupyter notebooks with old data
-    |   +-- categories.csv
-    |   +-- messages.csv
-    |   +-- messages.db
-    |   +-- ML Pipeline Preparation.ipynb
-    |   +-- ETL Pipeline Preparation.ipynb
-    
+.  
+├── README.md
+├── app                              
+│   ├── requirements.txt
+│   ├── run.py                      # flask web app
+│   └── templates                   # html templates
+│       ├── go.html                 # classification results
+│       └── master.html             # homepage
+├── data
+│   ├── DisasterResponse.db         # sql database containing messages and corresponding categories
+│   ├── disaster_categories.csv     # data set classification categories
+│   ├── disaster_messages.csv       # data set messages
+│   └── process_data.py             # extract transform load data
+├── models
+│   ├── classifier.pkl              # trained classifier (not included in repo)
+│   └── train_classifier.py         # train and save classifier
+├── notebooks                       # old data and notebooks
+│   ├── ETL\ Pipeline\ Preparation.ipynb
+│   ├── ML\ Pipeline\ Preparation.ipynb
+│   ├── categories.csv
+│   ├── messages.csv
+│   └── messages.db
+└── static                          # pictures for readme
+    ├── Example.png
+    └── Hompage.png
 
 ## Instructions to run the app:
 1. Run the following commands in the project's root directory to set up your database and model.
