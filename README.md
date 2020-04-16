@@ -1,10 +1,10 @@
 # Disaster_Response_Pipeline
-This repository contains the code for a disaster response pipeline, a project for my Udacity data science course.
+This repository contains the code for a disaster response app, a project for my Udacity data science course.
 Objective is to write an interactive web-app that allows the classification of messages into different categories
-e.g. request for aid, medical help etc. A pre labeld data set from FigureEight is utilized as training data, for 
+e.g. request for aid, medical help etc. A pre labeled data set from FigureEight is utilized as training data, for 
 the following data processing steps:
 
-- Data preproessing (Extract Transform Load)
+- Data preprocessing (Extract Transform Load)
     - Extraction of data from csv, transformation usable tabular form, loading into sql database
 - Training and optimization of data machine learning pipeline
     - Data is loaded form sql database and divided into features and labels
@@ -13,13 +13,55 @@ the following data processing steps:
     - Data is classified using a multi output Random Forrest Classifier
     - The whole data pipeline is optimized using a grid search, optimizing with respect to the number of decision trees for the classifier
     - The optimized pipeline is saves as a pickle
+- Interactive web app displaying
+    - Load database form sql
+    - Displaying a summary of the database
+    - Allow classification of user input
 
+## File Description
+    .
+    +-- app     
+    |   +-- run.py                   # flask web app
+    |   +-- templates   
+    |       +-- go.html              # Classification result
+    |       +-- master.html          # Homepage    
+    +-- data                   
+    |   +-- disaster_categories.csv # Data set classification categories  
+    |   +-- disaster_messages.csv   # Data set messages
+    |    +-- process_data.py         # Extract Transform Load Data
+    +-- models
+    |   +-- train_classifier.py     # Train and save model classifier 
+    +-- static  
+    |   +-- Example.png             # Picture of example
+    |   +-- Homepage.png            # Picture of Homepage
+    +-- README.md                   # Readme
+    +-- notebooks                   # Jupyter notebooks with old data
+    |   +-- categories.csv
+    |   +-- messages.csv
+    |   +-- messages.db
+    |   +-- ML Pipeline Preparation.ipynb
+    |   +-- ETL Pipeline Preparation.ipynb
+    
 
-# File and folder description
-File/Folder| Description 
---- | ---
-...| .....
-.... | ...
+## Instructions to run the app:
+1. Run the following commands in the project's root directory to set up your database and model.
+
+    - To run ETL pipeline that cleans data and stores in database
+        `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
+    - To run ML pipeline that trains classifier and saves
+        `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
+
+2. Run the following command in the app's directory to run your web app.
+    `python run.py`
+
+3. Go to http://0.0.0.0:3001/
+
+## Results
+
+![Homepage](static/Homepage.png)
+### Example
+Type: I need help!
+![Homepage](static/Example.png)
 
 # Installation 
 ```bash
