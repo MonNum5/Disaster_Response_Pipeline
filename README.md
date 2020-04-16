@@ -19,6 +19,7 @@ the following data processing steps:
     - Allow classification of user input
 
 ## File Description
+'''
 .  
 ├── README.md
 ├── app                              
@@ -44,6 +45,7 @@ the following data processing steps:
 └── static                          # pictures for readme
     ├── Example.png
     └── Hompage.png
+'''
 
 ## Instructions to run the app:
 1. Run the following commands in the project's root directory to set up your database and model.
