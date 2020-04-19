@@ -107,7 +107,7 @@ def index():
         {
             'data': [
                 Bar(
-                    x=most_common_dict.index,
+                    x=label_names,
                     y=most_common_dict['count'],
                     text=most_common_dict['word'],
                     textposition='auto',
