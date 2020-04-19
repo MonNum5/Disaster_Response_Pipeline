@@ -1,29 +1,39 @@
 import json
 import plotly
 import pandas as pd
-
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import word_tokenize
+import re
 
 from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
+import numpy as np
+
+import nltk
+from nltk.corpus import stopwords
+import collections
+nltk.download(['punkt','wordnet'])
+nltk.download('stopwords')
+stopword_list = set(stopwords.words('english'))
 
 
 app = Flask(__name__)
 
 def tokenize(text):
-    tokens = word_tokenize(text)
-    lemmatizer = WordNetLemmatizer()
-
-    clean_tokens = []
-    for tok in tokens:
-        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
-        clean_tokens.append(clean_tok)
-
+    '''
+    input:
+        text: Text of message to be tokenized
+    output:
+        clean_tokens: Preprocessed text data
+    '''
+    text=re.sub(r"[^a-zA-Z0-9]"," ",text.lower())
+    text=nltk.word_tokenize(text)
+    lemmatizer= nltk.stem.WordNetLemmatizer()
+    clean_tokens=[lemmatizer.lemmatize(i).strip() for i in text if i not in stopword_list]
     return clean_tokens
+
+
 
 # load data
 engine = create_engine('sqlite:///../data/DisasterResponse.db')
@@ -44,6 +54,14 @@ def index():
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+    # Added Plotly graphs
+
+    # Distribution for each label
+    label_names = list(df.columns[4:])
+    number_per_category = [df[cat].sum() for cat in label_names]
+
+    most_common_dict=pd.read_csv(open('../data/MostCommonWords.csv','rb'))
+
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -64,7 +82,50 @@ def index():
                     'title': "Genre"
                 }
             }
-        }
+        },
+
+        {
+            'data': [
+                Bar(
+                    x=label_names,
+                    y=number_per_category
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Categories',
+       
+                'yaxis': {
+                    'title': "Number of Datasets"
+                },
+                'xaxis': {
+                    'title': "Name of Category"
+                }
+            }
+        },
+
+        {
+            'data': [
+                Bar(
+                    x=most_common_dict.index,
+                    y=most_common_dict['count'],
+                    text=most_common_dict['word'],
+                    textposition='auto',
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Categories',
+       
+                'yaxis': {
+                    'title': "Number of Datasets"
+                },
+                'xaxis': {
+                    'title': "Name of Category"
+                }
+            }
+        },
+     
     ]
     
     # encode plotly graphs in JSON

@@ -10,14 +10,25 @@ import re
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import classification_report
+from sklearn.multiclass import OneVsOneClassifier
+from sklearn.model_selection import GridSearchCV
 import joblib
 
 
 def load_data(database_filepath):
+    '''
+    input:
+        database_filepath: File path to the database
+    output:
+        X: Training values, array of of messages
+        Y: Training labels
+        category_names: names of the labels
+    '''
     engine = create_engine(f'sqlite:///{database_filepath}')
     con = engine.connect()
     df=pd.read_sql('messages',con)
@@ -27,6 +38,12 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    '''
+    input:
+        text: Text of message to be tokenized
+    output:
+        clean_tokens: Preprocessed text data
+    '''
     text=re.sub(r"[^a-zA-Z0-9]"," ",text.lower())
     text=nltk.word_tokenize(text)
     lemmatizer= nltk.stem.WordNetLemmatizer()
@@ -35,22 +52,51 @@ def tokenize(text):
 
 
 def build_model():
+    '''
+    input:
+        None
+    output:
+        gridsearch_cv: Gridsearch with cross validation of pipeline
+    '''
     pipeline = Pipeline([
         ('vect',CountVectorizer(tokenizer=tokenize)),
         ('tfidf',TfidfTransformer()),
-        ('clf',MultiOutputClassifier(RandomForestClassifier(random_state=0)))
+        ('clf',MultiOutputClassifier(OneVsOneClassifier(SVC(random_state=0))))
     ])
-    return pipeline
+
+    parameters = parameters = {
+              #'clf__estimator__estimator__C': [1, 2, 5],
+              'tfidf__sublinear_tf': [True, False],
+              #'tfidf__use_idf': [True, False],             
+             }
+    gridsearch_cv = GridSearchCV(pipeline, param_grid=parameters, scoring='precision_samples', cv = 5, verbose=2, n_jobs=-1)
+
+    return gridsearch_cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    '''
+    input:
+        model: Model to be evaluated
+        X_test: X values for testing
+        Y_test: Y values for testing
+        category_names: Names of the Y labels
+    output:
+        None
+    '''
     y_pred = model.predict(X_test)
-    for i, col in enumerate(category_names):
-        print(i, col)
-        print(classification_report(y_pred[:,i],Y_test[:,i]))
+
+    print(classification_report(y_pred,Y_test, target_names=category_names))
 
 
 def save_model(model, model_filepath):
+    '''
+    input:
+        model: Model to be saved
+        model_filepath: Safe path for model
+    output:
+        None
+    '''
     joblib.dump(model, model_filepath)
 
 

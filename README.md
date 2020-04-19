@@ -1,7 +1,9 @@
 # Disaster_Response_Pipeline
 This repository contains the code for a disaster response app, a project for my Udacity data science course.
-Objective is to write an interactive web-app that allows the classification of messages into different categories
-e.g. request for aid, medical help etc. A pre labeled data set from FigureEight is utilized as training data, for 
+
+## Project Motivation
+
+The quick and accurate classification of text messages with respect to different topics and corresponding seriousness is vital in a disaster situation. In this project I want to apply knowledge learned about data engineering to analyze from  a representative disaster scenario, build a model able to classify the data and make the model accessible with a web app. A pre labeled data set from FigureEight is utilized as training data, for 
 the following data processing steps:
 
 - Data preprocessing (Extract Transform Load)
