@@ -115,10 +115,10 @@ def index():
             ],
 
             'layout': {
-                'title': 'Distribution of Categories',
+                'title': 'Most Common Words per Category',
        
                 'yaxis': {
-                    'title': "Number of Datasets"
+                    'title': "Count"
                 },
                 'xaxis': {
                     'title': "Name of Category"
